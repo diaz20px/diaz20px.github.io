@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil de Usuario</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #1e1e2f, #3a3a60);
+      padding: 20px;
+    }
+
+    .profile-card {
+      width: 360px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 25px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      color: white;
+      text-align: center;
+    }
+
+    .cover {
+      height: 130px;
+      background: linear-gradient(120deg, #7f5af0, #2cb67d);
+      position: relative;
+    }
+
+    .avatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 5px solid white;
+      background: white;
+      position: absolute;
+      bottom: -55px;
+      left: 50%;
+      transform: translateX(-50%);
+      overflow: hidden;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .content {
+      padding: 70px 25px 30px;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .role {
+      color: #d1d1d1;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .bio {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #f0f0f0;
+      margin-bottom: 25px;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 25px;
+      gap: 10px;
+    }
+
+    .stat {
+      flex: 1;
+      background: rgba(255,255,255,0.08);
+      padding: 12px;
+      border-radius: 15px;
+    }
+
+    .stat h3 {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .stat p {
+      font-size: 12px;
+      color: #dcdcdc;
+    }
+
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      background: linear-gradient(120deg, #7f5af0, #2cb67d);
+      color: white;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="profile-card">
+    <div class="cover">
+      <div class="avatar">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2gla7DAo8l4bhqkAE8JeOpoTmSy1c2uuhkg&s" alt="Usuario">
+      </div>
+    </div>
+
+    <div class="content">
+      <h2>Fernando Dávila</h2>
+      <p class="role">Ingeniero de Software</p>
+
+      <p class="bio">
+        Apasionado por el desarrollo web, inteligencia artificial y soluciones innovadoras para empresas modernas.
+      </p>
+
+      <div class="stats">
+        <div class="stat">
+          <h3>120</h3>
+          <p>Proyectos</p>
+        </div>
+        <div class="stat">
+          <h3>8K</h3>
+          <p>Seguidores</p>
+        </div>
+        <div class="stat">
+          <h3>5+</h3>
+          <p>Años Exp.</p>
+        </div>
+      </div>
+
+      <a href="#" class="btn">Ver Perfil</a>
+    </div>
+  </div>
+
+</body>
+</html>
