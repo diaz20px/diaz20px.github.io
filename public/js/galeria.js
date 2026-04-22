@@ -1,5 +1,7 @@
+// ================= CONTACTOS =================
 let contactos = JSON.parse(localStorage.getItem('contactos')) || [];
 
+// MOSTRAR SECCIONES
 function mostrar(seccion) {
     document.getElementById('perfil').style.display = 'none';
     document.getElementById('album').style.display = 'none';
@@ -8,11 +10,21 @@ function mostrar(seccion) {
     document.getElementById(seccion).style.display = 'block';
 
     cerrarPanel();
+
+    if (seccion === 'album') {
+        mostrarTodas();
+    }
 }
 
+// AGREGAR CONTACTO
+document.getElementById('formContacto').addEventListener('submit', function(e) {
+    e.preventDefault();
+    agregarContacto();
+});
+
 function agregarContacto() {
-    const nombre = document.getElementById('nombre').value;
-    const telefono = document.getElementById('telefono').value;
+    const nombre = document.getElementById('nombre').value.trim();
+    const telefono = document.getElementById('telefono').value.trim();
 
     if (!nombre || !telefono) {
         alert("Completa los campos");
@@ -28,19 +40,28 @@ function agregarContacto() {
     document.getElementById('telefono').value = '';
 }
 
+// MOSTRAR CONTACTOS
 function mostrarContactos() {
     const lista = document.getElementById('listaContactos');
     lista.innerHTML = '';
 
+    if (contactos.length === 0) {
+        lista.innerHTML = `<li class="list-group-item">Sin contactos</li>`;
+        return;
+    }
+
     contactos.forEach((c) => {
         lista.innerHTML += `
         <li class="list-group-item">
-            ${c.nombre}<br><small>${c.telefono}</small>
+            <strong>${c.nombre}</strong><br>
+            <small>${c.telefono}</small>
         </li>`;
     });
 }
 
+// PANEL
 function togglePanel() {
+    mostrarContactos();
     document.getElementById('panel').classList.add('activo');
     document.getElementById('overlay').classList.add('activo');
 }
@@ -50,69 +71,41 @@ function cerrarPanel() {
     document.getElementById('overlay').classList.remove('activo');
 }
 
-mostrarContactos();
-
-// 🔥 Cerrar panel al cambiar tamaño de pantalla
-window.addEventListener('resize', () => {
-    cerrarPanel();
-});
-
-// 🔥 Asegurar que inicie cerrado
-window.addEventListener('load', () => {
-    cerrarPanel();
-});
-
-// ============ GALERÍA ============
-// ===== FAVORITOS =====
+// ================= FAVORITOS =================
 let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
 
-// ===== ACTIVAR CORAZONES =====
-function activarLikes() {
-    const galeria = document.getElementById('galeria');
-    const imgs = galeria.querySelectorAll('img');
+// INICIAR LIKES
+function iniciarLikes() {
+    const items = document.querySelectorAll('.img-wrapper');
 
-    imgs.forEach((img) => {
+    items.forEach(item => {
+        const img = item.querySelector('img');
+        const btn = item.querySelector('.like-btn');
         const src = img.getAttribute('src');
 
-        // evitar duplicados
-        if (img.parentElement.classList.contains('img-wrapper')) return;
-
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('img-wrapper');
-
-        const like = document.createElement('span');
-        like.classList.add('like-btn');
-        like.innerHTML = "❤️";
-
-        // si ya es favorito → rojo
+        // estado guardado
         if (favoritos.includes(src)) {
-            like.classList.add('activo');
+            btn.classList.add('activo');
         }
 
-        like.onclick = () => toggleFavorito(src, like);
+        btn.onclick = () => {
+            if (favoritos.includes(src)) {
+                favoritos = favoritos.filter(i => i !== src);
+                btn.classList.remove('activo');
+            } else {
+                favoritos.push(src);
+                btn.classList.add('activo');
+            }
 
-        img.parentNode.insertBefore(wrapper, img);
-        wrapper.appendChild(img);
-        wrapper.appendChild(like);
+            localStorage.setItem('favoritos', JSON.stringify(favoritos));
+        };
+
+        // doble click en imagen ❤️
+        img.ondblclick = () => btn.click();
     });
-
 }
 
-// ===== TOGGLE FAVORITO =====
-function toggleFavorito(src, btn) {
-    if (favoritos.includes(src)) {
-        favoritos = favoritos.filter(i => i !== src);
-        btn.classList.remove('activo');
-    } else {
-        favoritos.push(src);
-        btn.classList.add('activo');
-    }
-
-    localStorage.setItem('favoritos', JSON.stringify(favoritos));
-
-}
-
-// ===== VER FAVORITOS =====
+// VER SOLO FAVORITOS
 function verFavoritos() {
     const items = document.querySelectorAll('#galeria .img-wrapper');
 
@@ -120,34 +113,30 @@ function verFavoritos() {
         const img = item.querySelector('img').getAttribute('src');
 
         if (favoritos.includes(img)) {
-            item.style.display = 'inline-block';
+            item.style.display = 'block';
         } else {
             item.style.display = 'none';
         }
     });
-
 }
 
-// ===== MOSTRAR TODAS =====
+// FAVORITOS DESDE MENÚ
+function verFavoritosMenu() {
+    mostrar('album');
+    verFavoritos();
+}
+
+// MOSTRAR TODAS
 function mostrarTodas() {
     const items = document.querySelectorAll('#galeria .img-wrapper');
-    items.forEach(item => item.style.display = 'inline-block');
+    items.forEach(item => item.style.display = 'block');
 }
 
-// ===== NAVEGACION =====
-function mostrar(seccion) {
-    document.getElementById('perfil').style.display = 'none';
-    document.getElementById('album').style.display = 'none';
-    document.getElementById('contacto').style.display = 'none';
+// ================= EVENTOS =================
+window.addEventListener('resize', cerrarPanel);
 
-    document.getElementById(seccion).style.display = 'block';
-
+window.addEventListener('load', () => {
     cerrarPanel();
-
-    if (seccion === 'album') {
-        activarLikes();
-        mostrarTodas(); // 🔥 IMPORTANTE (restaura todas)
-    }
-
-}
-
+    mostrarContactos();
+    iniciarLikes(); // 🔥 importante
+});

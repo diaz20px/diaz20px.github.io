@@ -1,15 +1,21 @@
+/* RESET */
+* {
+    box-sizing: border-box;
+}
+
+/* BODY */
 body {
     margin: 0;
     height: 100vh;
-    background: #0f172a;
-    color: white;
+    background: #0b0f1a;
+    color: #e5e7eb;
     font-family: 'Segoe UI', sans-serif;
 }
 
 /* LAYOUT */
 .layout {
     display: grid;
-    grid-template-columns: 280px 1fr;
+    grid-template-columns: 260px 1fr;
     height: 100vh;
 }
 
@@ -17,94 +23,164 @@ body {
 .menu {
     background: #111827;
     padding: 20px;
-    border-right: 1px solid #334155;
+    border-right: 1px solid #1f2937;
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
+/* PERFIL */
 .perfil {
     text-align: center;
 }
 
 .perfil img {
-    width: 110px;
-    height: 110px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-    border: 3px solid #3b82f6;
+    border: 2px solid #2563eb;
+    object-fit: cover;
 }
 
-.menu button {
-    width: 100%;
+/* BOTONES */
+.contenButon {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.contenButon button {
     padding: 12px;
-    border-radius: 10px;
+    border-radius: 8px;
     border: none;
-    background: #1e293b;
-    color: white;
+    background: #1f2937;
+    color: #e5e7eb;
+    cursor: pointer;
     transition: 0.3s;
 }
 
-.menu button:hover {
-    background: #3b82f6;
+.contenButon button:hover {
+    background: #2563eb;
 }
 
 /* CONTENIDO */
 .contenido {
-    padding: 30px;
+    padding: 20px;
     overflow-y: auto;
 }
 
+/* TARJETAS */
 .card-custom {
-    background: linear-gradient(#000 , #0ff);
-    border-radius: 15px;
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 12px;
     padding: 20px;
-    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    overflow: hidden;
 }
 
-/* FORMULARIO CENTRADO */
+/* PERFIL CENTRADO */
+#perfil {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+}
+
+#perfil .card {
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+}
+
+/* FORMULARIO */
 .form-contacto {
     max-width: 400px;
-    margin: 0 auto;
+    margin: auto;
+}
+
+/* INPUTS */
+.form-control {
+    background: #0b0f1a;
+    color: #e5e7eb;
+    border: 1px solid #1f2937;
+}
+
+.form-control:focus {
+    border-color: #2563eb;
+    box-shadow: none;
 }
 
 /* GALERIA */
 .gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
 }
 
+/* 🔥 IMPORTANTE (arregla corazones) */
+.img-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+/* IMÁGENES */
 .gallery img {
     width: 100%;
-    height: 130px;
+    height: 220px;
     object-fit: cover;
-    border-radius: 10px;
+    border-radius: 12px;
+    display: block;
 }
 
-/* INPUTS */
-.form-control {
-    background: #0f172a;
+/* LIKE */
+.like-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 50%;
+    padding: 6px;
     color: white;
-    border: 1px solid #334155;
+    opacity: 0.7;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-/* BOTONES */
-.btn-primary {
-    background: #3b82f6;
-    border: none;
+.like-btn:hover {
+    opacity: 1;
 }
 
-.btn-outline-info {
-    border-color: #3b82f6;
-    color: #3b82f6;
+.like-btn.activo {
+    color: #2563eb;
+    transform: scale(1.2);
+    opacity: 1;
+}
+
+/* PANEL */
+.panel-contactos {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 320px;
+    max-width: 100%;
+    height: 100%;
+    background: #111827;
+    padding: 20px;
+    transform: translateX(100%);
+    transition: 0.3s;
+    z-index: 9999;
+}
+
+.panel-contactos.activo {
+    transform: translateX(0);
 }
 
 /* OVERLAY */
 .overlay {
     position: fixed;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    inset: 0;
+    background: rgba(0,0,0,0.6);
     opacity: 0;
     visibility: hidden;
     transition: 0.3s;
@@ -115,79 +191,54 @@ body {
     visibility: visible;
 }
 
-/* PANEL */
-.panel-contactos {
-    position: fixed;
-    top: 0;
-    right: 0;
-    transform: translateX(100%);
-    width: 350px;
-    height: 100vh;
-    background: #111827;
-    padding: 20px;
-    transition: transform 0.4s ease;
-    overflow-y: auto;
-    border-left: 1px solid #334155;
-    z-index: 9999;
-}
-
-.panel-contactos.activo {
-    transform: translateX(0);
-}
-
-/* RESPONSIVE */
+/* ===================== */
+/* 📱 RESPONSIVE MOBILE */
+/* ===================== */
 @media (max-width: 768px) {
+
     .layout {
         grid-template-columns: 1fr;
     }
 
     .menu {
+        padding: 15px;
         align-items: center;
     }
 
-    .form-contacto {
-        max-width: 100%;
+    /* BOTONES EN FILA */
+    .contenButon {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    /* BOTONES CIRCULARES */
+    .contenButon button {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        padding: 0;
+        font-size: 18px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .contenido {
+        padding: 15px;
+    }
+
+    .gallery {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    }
+
+    .gallery img {
+        height: 160px;
     }
 
     .panel-contactos {
         width: 100%;
     }
-
 }
-
-/* ================== */
-
-#album{
-    background: linear-gradient(#000 , rgb(255, 0, 0));
-}
-.gallery img {
-    position: relative;
-}
-
-.img-wrapper {
-    position: relative;
-    display: inline-block;
-}
-
-.like-btn {
-position: absolute;
-top: 5px;
-right: 8px;
-font-size: 18px;
-cursor: pointer;
-padding: 4px 6px;
-border-radius: 50%;
-background: rgba(0,0,0,0.5);
-transition: 0.3s;
-
-/* 🔥 esto lo vuelve BLANCO */
-filter: grayscale(100%) brightness(200%);
-
-}
-
-.like-btn.activo {
-/* 🔥 vuelve a rojo normal */
-filter: none;
-transform: scale(1.2);
-}
-
