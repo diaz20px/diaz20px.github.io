@@ -1,142 +1,216 @@
-// ================= CONTACTOS =================
-let contactos = JSON.parse(localStorage.getItem('contactos')) || [];
+// CONTACTOS
+let contactos =
+JSON.parse(localStorage.getItem('contactos')) || [];
+
+// FAVORITOS
+let favoritos =
+JSON.parse(localStorage.getItem('favoritos')) || [];
+
 
 // MOSTRAR SECCIONES
 function mostrar(seccion) {
-    document.getElementById('perfil').style.display = 'none';
-    document.getElementById('album').style.display = 'none';
-    document.getElementById('contacto').style.display = 'none';
 
-    document.getElementById(seccion).style.display = 'block';
+    document.querySelectorAll('.contenido > div')
+    .forEach(sec => {
 
-    cerrarPanel();
+        sec.style.opacity = '0';
 
-    if (seccion === 'album') {
-        mostrarTodas();
-    }
+        setTimeout(() => {
+            sec.style.display = 'none';
+        }, 200);
+
+    });
+
+    setTimeout(() => {
+
+        const section =
+        document.getElementById(seccion);
+
+        if(seccion === 'perfil'){
+
+            section.style.display = 'flex';
+
+        }else{
+
+            section.style.display = 'block';
+
+        }
+
+        setTimeout(() => {
+            section.style.opacity = '1';
+        }, 50);
+
+    }, 250);
+
 }
+
 
 // AGREGAR CONTACTO
-document.getElementById('formContacto').addEventListener('submit', function(e) {
+document.getElementById('formContacto')
+.addEventListener('submit', function(e){
+
     e.preventDefault();
-    agregarContacto();
+
+    const nombre =
+    document.getElementById('nombre').value;
+
+    const telefono =
+    document.getElementById('telefono').value;
+
+    contactos.push({nombre, telefono});
+
+    localStorage.setItem(
+        'contactos',
+        JSON.stringify(contactos)
+    );
+
+    mostrarContactos();
+
+    actualizarStats();
+
+    this.reset();
+
 });
 
-function agregarContacto() {
-    const nombre = document.getElementById('nombre').value.trim();
-    const telefono = document.getElementById('telefono').value.trim();
 
-    if (!nombre || !telefono) {
-        alert("Completa los campos");
-        return;
-    }
+// CONTACTOS
+function mostrarContactos(){
 
-    contactos.push({ nombre, telefono });
-    localStorage.setItem('contactos', JSON.stringify(contactos));
+    const lista =
+    document.getElementById('listaContactos');
 
-    mostrarContactos();
-
-    document.getElementById('nombre').value = '';
-    document.getElementById('telefono').value = '';
-}
-
-// MOSTRAR CONTACTOS
-function mostrarContactos() {
-    const lista = document.getElementById('listaContactos');
     lista.innerHTML = '';
 
-    if (contactos.length === 0) {
-        lista.innerHTML = `<li class="list-group-item">Sin contactos</li>`;
-        return;
-    }
+    contactos.forEach(c => {
 
-    contactos.forEach((c) => {
         lista.innerHTML += `
-        <li class="list-group-item">
-            <strong>${c.nombre}</strong><br>
-            <small>${c.telefono}</small>
-        </li>`;
+            <li class="list-group-item">
+                <strong>${c.nombre}</strong>
+                <br>
+                ${c.telefono}
+            </li>
+        `;
+
     });
+
 }
+
 
 // PANEL
-function togglePanel() {
+function togglePanel(){
+
     mostrarContactos();
-    document.getElementById('panel').classList.add('activo');
-    document.getElementById('overlay').classList.add('activo');
+
+    panel.classList.add('activo');
+
+    overlay.classList.add('activo');
+
 }
 
-function cerrarPanel() {
-    document.getElementById('panel').classList.remove('activo');
-    document.getElementById('overlay').classList.remove('activo');
+function cerrarPanel(){
+
+    panel.classList.remove('activo');
+
+    overlay.classList.remove('activo');
+
 }
 
-// ================= FAVORITOS =================
-let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
 
-// INICIAR LIKES
-function iniciarLikes() {
-    const items = document.querySelectorAll('.img-wrapper');
+// LIKES
+function iniciarLikes(){
+
+    const items =
+    document.querySelectorAll('.img-wrapper');
 
     items.forEach(item => {
-        const img = item.querySelector('img');
-        const btn = item.querySelector('.like-btn');
-        const src = img.getAttribute('src');
 
-        // estado guardado
-        if (favoritos.includes(src)) {
+        const img =
+        item.querySelector('img');
+
+        const btn =
+        item.querySelector('.like-btn');
+
+        const src =
+        img.getAttribute('src');
+
+        if(favoritos.includes(src)){
+
             btn.classList.add('activo');
+
         }
 
         btn.onclick = () => {
-            if (favoritos.includes(src)) {
-                favoritos = favoritos.filter(i => i !== src);
+
+            if(favoritos.includes(src)){
+
+                favoritos =
+                favoritos.filter(i => i !== src);
+
                 btn.classList.remove('activo');
-            } else {
+
+            }else{
+
                 favoritos.push(src);
+
                 btn.classList.add('activo');
+
             }
 
-            localStorage.setItem('favoritos', JSON.stringify(favoritos));
+            localStorage.setItem(
+                'favoritos',
+                JSON.stringify(favoritos)
+            );
+
+            actualizarStats();
+
         };
 
-        // doble click en imagen ❤️
-        img.ondblclick = () => btn.click();
+        // MODAL
+        img.onclick = () => {
+
+            document.getElementById('imgModal')
+            .classList.add('activo');
+
+            document.getElementById('modalImg')
+            .src = src;
+
+        };
+
     });
+
 }
 
-// VER SOLO FAVORITOS
-function verFavoritos() {
-    const items = document.querySelectorAll('#galeria .img-wrapper');
 
-    items.forEach(item => {
-        const img = item.querySelector('img').getAttribute('src');
+// CERRAR MODAL
+function cerrarModal(){
 
-        if (favoritos.includes(img)) {
-            item.style.display = 'block';
-        } else {
-            item.style.display = 'none';
-        }
-    });
+    document.getElementById('imgModal')
+    .classList.remove('activo');
+
 }
 
-// FAVORITOS DESDE MENÚ
-function verFavoritosMenu() {
-    mostrar('album');
-    verFavoritos();
+
+// STATS
+function actualizarStats(){
+
+    document.getElementById(
+        'totalFavoritos'
+    ).innerText = favoritos.length;
+
+    document.getElementById(
+        'totalContactos'
+    ).innerText = contactos.length;
+
 }
 
-// MOSTRAR TODAS
-function mostrarTodas() {
-    const items = document.querySelectorAll('#galeria .img-wrapper');
-    items.forEach(item => item.style.display = 'block');
-}
 
-// ================= EVENTOS =================
-window.addEventListener('resize', cerrarPanel);
-
+// LOAD
 window.addEventListener('load', () => {
-    cerrarPanel();
+
+    iniciarLikes();
+
     mostrarContactos();
-    iniciarLikes(); // 🔥 importante
+
+    actualizarStats();
+
 });
